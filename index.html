@@ -3,72 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Software Update</title>
+    <title>WhatsApp Web</title>
     <style>
-        body { background: black; color: #0f0; font-family: monospace; margin: 0; overflow: hidden; touch-action: none; }
-        #hacker-screen { padding: 20px; height: 100vh; display: none; }
-        
-        /* ফেক হোমস্ক্রিন ইমেজ সেটআপ */
-        #fake-home { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: url('https://i.imgur.com/W3i4p5y.png') no-repeat center; 
-            background-size: cover; display: none; z-index: 10000;
-        }
-        
-        #error-box {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; color: black; padding: 20px; width: 80%;
-            border-radius: 10px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            font-family: sans-serif;
-        }
+        body { font-family: sans-serif; margin: 0; background: #ece5dd; overflow: hidden; }
+        #header { background: #075e54; color: white; padding: 15px; display: flex; align-items: center; font-weight: bold; }
+        #chat-area { height: calc(100vh - 120px); padding: 10px; display: flex; flex-direction: column; justify-content: flex-end; }
+        #input-area { background: white; padding: 10px; display: flex; align-items: center; position: fixed; bottom: 0; width: 100%; border-top: 1px solid #ddd; }
+        #typewriter { flex: 1; padding: 10px; border: none; outline: none; font-size: 16px; color: #333; height: 20px; }
+        .send-btn { color: #075e54; font-weight: bold; margin: 0 10px; font-size: 20px; }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
     </style>
 </head>
 <body onclick="startPrank()">
 
-    <div id="setup" style="text-align: center; color: white; padding-top: 40%;">
-        <h3>System Update Ready</h3>
-        <button style="padding: 15px; background: #007bff; color: white; border: none; border-radius: 5px;">INSTALL NOW</button>
-    </div>
-
-    <div id="hacker-screen"></div>
-
-    <div id="fake-home">
-        <div id="error-box">
-            <b style="color: red;">System UI Error</b><br><br>
-            <p>Android System is not responding.<br>Touch screen disabled for safety.</p>
-            <hr>
-            <p style="color: #007bff; font-weight: bold;">WAIT | CLOSE APP</p>
+    <div id="overlay">
+        <div>
+            <h2>WhatsApp Web</h2>
+            <p>Scanning QR Code... Click to login.</p>
+            <button style="padding: 10px 20px; background: #25D366; border: none; color: white; border-radius: 5px; font-weight: bold;">LOGIN</button>
         </div>
     </div>
 
-    <script>
-        function startPrank() {
-            document.getElementById('setup').style.display = 'none';
-            document.getElementById('hacker-screen').style.display = 'block';
-            document.documentElement.requestFullscreen();
+    <div id="header">
+        <span style="font-size: 20px; margin-right: 10px;">←</span>
+        <span>Hacker_Anonymous</span>
+    </div>
 
-            let logs = ["> Connecting...", "> Bypassing Security...", "> Accessing System UI...", "> Locking Home Screen..."];
-            let i = 0;
-            let interval = setInterval(() => {
-                if(i < logs.length) {
-                    let p = document.createElement("p");
-                    p.innerHTML = logs[i];
-                    document.getElementById('hacker-screen').appendChild(p);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    setTimeout(triggerFakeHome, 1000);
-                }
-            }, 800);
+    <div id="chat-area">
+        <div style="background: #dcf8c6; padding: 10px; border-radius: 10px; align-self: flex-start; max-width: 80%; margin-bottom: 10px;">
+            Hello! I am inside your phone. 💀
+        </div>
+    </div>
+
+    <div id="input-area">
+        <div id="typewriter"></div>
+        <div class="send-btn">➤</div>
+    </div>
+
+    <script>
+        const message = "System override complete. I am now typing from your keyboard. Your data is being uploaded to the dark web... Do not close this app.";
+        let i = 0;
+        let started = false;
+
+        function startPrank() {
+            if(started) return;
+            started = true;
+            document.getElementById('overlay').style.display = 'none';
+            document.documentElement.requestFullscreen(); // ফুলস্ক্রিন করে রিয়েল লুক দেওয়া
+            
+            typeMessage();
         }
 
-        function triggerFakeHome() {
-            // হ্যাকিং স্ক্রিন সরিয়ে ফেক হোমস্ক্রিন দেখানো
-            document.getElementById('hacker-screen').style.display = 'none';
-            document.getElementById('fake-home').style.display = 'block';
-            
-            // ফোন ভাইব্রেট হবে (Android)
-            if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
+        function typeMessage() {
+            if (i < message.length) {
+                document.getElementById("typewriter").innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeMessage, 100); // টাইপিং স্পিড
+            } else {
+                // টাইপিং শেষ হওয়ার পর এরর মেসেজ
+                setTimeout(() => {
+                    alert("ERROR: SEND BUTTON DISABLED BY REMOTE USER");
+                }, 1000);
+            }
         }
     </script>
 </body>
