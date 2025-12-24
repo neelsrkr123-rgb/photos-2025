@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ System Intrusion Detected</title>
+    <style>
+        body { background: black; color: #00ff00; font-family: 'Courier New', Courier, monospace; padding: 20px; overflow: hidden; margin: 0; }
+        #console { font-size: 16px; line-height: 1.5; }
+        .alert { color: red; font-weight: bold; text-transform: uppercase; border: 1px solid red; padding: 10px; display: inline-block; margin-top: 10px; }
+        .blink { animation: blinker 0.8s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        #video-overlay { position: fixed; top: 10px; right: 10px; border: 2px solid #0f0; width: 120px; height: 90px; background: #222; display: none; text-align: center; font-size: 10px; }
+    </style>
+</head>
+<body onclick="startPrank()">
+
+    <div id="setup" style="text-align: center; margin-top: 100px;">
+        <h2 class="alert blink">⚠️ SECURITY BREACH ⚠️</h2>
+        <p>Your browser has detected a malicious attempt to access your files.</p>
+        <button style="padding: 15px 30px; background: green; color: white; border: none; cursor: pointer; font-weight: bold;">CLICK TO RUN SYSTEM SCAN</button>
+    </div>
+
+    <div id="console"></div>
+    <div id="video-overlay">LIVE CAMERA FEED<br>[RECORDING...]</div>
+
+    <script>
+        const logs = [
+            "> Establishing connection to secure proxy...",
+            "> Connection Encrypted via AES-256",
+            "> Bypassing Android Media Framework...",
+            "> [SUCCESS] Accessing Internal Storage (/sdcard/0/)",
+            "> Searching for sensitive files: .jpg, .mp4, .pdf",
+            "> Found 1,432 photos. Starting upload to 'DarkWeb_Server_7'...",
+            "> [!] Remote IP: 103.44.12.190 [Durgapur, WB]",
+            "> Activating Front Camera... 📸",
+            "> Tracking GPS Coordinates... Accuracy 5m",
+            "> [ALERT] User identity compromised.",
+            "> Deleting System32... (Just kidding, it's Android!)",
+            "> Wiping Google Account Data..."
+        ];
+
+        let i = 0;
+        function startPrank() {
+            // হাইড করার জন্য সেটাপ পেজ
+            document.getElementById('setup').style.display = 'none';
+            document.documentElement.requestFullscreen(); // ফুলস্ক্রিন
+            
+            // ফেক ক্যামেরা প্রিভিউ দেখানো
+            setTimeout(() => {
+                document.getElementById('video-overlay').style.display = 'block';
+            }, 5000);
+
+            typeLog();
+        }
+
+        function typeLog() {
+            if (i < logs.length) {
+                let p = document.createElement("p");
+                p.innerHTML = logs[i];
+                if(logs[i].includes("ALERT") || logs[i].includes("SUCCESS")) p.style.color = "yellow";
+                document.getElementById("console").appendChild(p);
+                i++;
+                
+                // অটো স্ক্রল নিচে যাবে
+                window.scrollTo(0, document.body.scrollHeight);
+                setTimeout(typeLog, 1200);
+            } else {
+                let final = document.createElement("div");
+                final.className = "alert blink";
+                final.innerHTML = "SYSTEM TOTAL CRASH: REBOOTING IN 5 SECONDS...";
+                document.getElementById("console").appendChild(final);
+                
+                // ৫ সেকেন্ড পর রিফ্রেশ হয়ে আবার শুরু হবে
+                setTimeout(() => { location.reload(); }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
