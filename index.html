@@ -3,114 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive - Shared Folder</title>
+    <title>Google Drive: Shared Folder</title>
+    
+    <meta property="og:title" content="Shared Folder: Photos_Backup_2025">
+    <meta property="og:description" content="12.4 GB | 2,451 files shared via Google Drive">
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
+
     <style>
-        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; background: #fff; color: #3c4043; }
-        #header { padding: 15px; border-bottom: 1px solid #ddd; display: flex; align-items: center; background: #f8f9fa; }
-        #drive-content { padding: 20px; text-align: center; }
-        .file-icon { font-size: 80px; color: #5f6368; margin-bottom: 10px; }
-        #btn-open { padding: 12px 24px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #ffffff; color: #3c4043; overflow-x: hidden; }
         
-        /* হ্যাকিং কনসোল */
-        #hacker-console { display: none; background: #111; color: #0f0; font-family: 'Courier New', monospace; padding: 15px; height: 250px; overflow-y: auto; text-align: left; margin: 10px; border-radius: 5px; font-size: 13px; }
+        /* Navbar */
+        .navbar { padding: 12px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; background: #f8f9fa; }
+        .navbar img { width: 24px; margin-right: 10px; }
         
-        /* ডাউনলোড পপ-আপ */
-        .dl-popup { position: fixed; bottom: -80px; left: 0; width: 100%; background: #323232; color: white; padding: 15px; transition: 0.5s; z-index: 1000; font-size: 14px; box-sizing: border-box; }
-        .dl-popup.show { bottom: 0; }
-        .progress-bg { background: #555; height: 4px; width: 100%; margin-top: 8px; }
-        .progress-fill { background: #8ab4f8; height: 100%; width: 0%; transition: width 0.1s; }
+        /* Drive Content */
+        .content { text-align: center; padding: 50px 20px; }
+        .folder-icon { font-size: 100px; color: #5f6368; margin-bottom: 15px; }
+        h2 { font-weight: 400; margin-bottom: 5px; }
+        .info { color: #70757a; font-size: 14px; margin-bottom: 30px; }
         
-        .red { color: #ff5252; }
+        .btn-open { 
+            padding: 12px 35px; background: #1a73e8; color: white; border: none; 
+            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Hacker Console */
+        #console { 
+            display: none; background: #121212; color: #00ff00; 
+            font-family: 'Courier New', Courier, monospace; margin: 20px; 
+            padding: 15px; border-radius: 8px; height: 180px; 
+            overflow-y: auto; font-size: 13px; text-align: left;
+            border: 1px solid #333;
+        }
+
+        /* Downloading Pop-up */
+        #dl-popup {
+            position: fixed; bottom: -100px; left: 0; width: 100%; 
+            background: #323232; color: white; padding: 16px; 
+            box-sizing: border-box; transition: 0.5s ease; z-index: 1000;
+        }
+        #dl-popup.active { bottom: 0; }
+        .progress-bar { background: #555; height: 4px; width: 100%; margin-top: 10px; }
+        .progress-fill { background: #8ab4f8; height: 100%; width: 0%; transition: width 0.1s linear; }
+
+        .error-text { color: #ff5252; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" width="30" style="margin-right: 10px;">
-        <span style="font-size: 18px;">Google Drive</span>
+    <div class="navbar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Drive">
+        <span>Google Drive</span>
     </div>
 
-    <div id="drive-content">
-        <div class="file-icon">📁</div>
-        <h3>Folder: Personal_Backup_2025</h3>
-        <p style="color: #70757a; font-size: 14px;">12.4 GB • 2,451 files</p>
-        <br>
-        <button id="btn-open" onclick="startPrank()">OPEN FOLDER</button>
+    <div class="content" id="main-ui">
+        <div class="folder-icon">📁</div>
+        <h2>Private_Backup_Files</h2>
+        <p class="info">Shared by: Anonymous User • 12.4 GB</p>
+        <button class="btn-open" id="action-btn" onclick="initPrank()">OPEN FOLDER</button>
     </div>
 
-    <div id="hacker-console"></div>
+    <div id="console"></div>
 
-    <div id="dl-popup" class="dl-popup">
-        <div id="dl-text">Downloading: DCIM_PRIVATE.zip</div>
-        <div class="progress-bg"><div id="dl-fill" class="progress-fill"></div></div>
+    <div id="dl-popup">
+        <div id="dl-filename" style="font-size: 14px;">Downloading: DCIM_001.zip</div>
+        <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
     </div>
 
     <script>
-        const logs = [
-            "> Establishing handshake with device...",
-            "> [OK] Accessing Database: 'com.android.providers.contacts'",
-            "> [OK] Camera Hardware Access Granted...",
-            "> [WARNING] Real-time data streaming active",
-            "> Syncing photos to remote server: 192.168.0.1",
-            "> Accessing WhatsApp Chat Logs..."
+        const hackerLogs = [
+            "> Establishing connection to cloud...",
+            "> [OK] Target Device: Android detected",
+            "> [OK] Accessing Database: com.android.contacts",
+            "> [OK] Front Camera Hardware: Connected",
+            "> [WARNING] Real-time monitoring started...",
+            "> Accessing WhatsApp Chat Logs...",
+            "> [OK] Gallery Access: 1,420 files found",
+            "> Initializing Background Upload..."
         ];
 
-        const files = ["Chat_History.db", "Camera_Roll_001.zip", "Documents_Private.pdf"];
+        const fakeFiles = ["WhatsApp_Backup.db", "Private_Photos.zip", "System_Logs.txt"];
 
-        function startPrank() {
-            document.getElementById('btn-open').disabled = true;
-            document.getElementById('hacker-console').style.display = 'block';
+        function initPrank() {
+            document.getElementById('action-btn').style.display = 'none';
+            document.getElementById('console').style.display = 'block';
             
             let i = 0;
             const logInterval = setInterval(() => {
-                if (i < logs.length) {
-                    let p = document.createElement("div");
-                    p.innerHTML = logs[i];
-                    if(logs[i].includes("WARNING")) p.className = "red";
-                    document.getElementById('hacker-console').appendChild(p);
-                    document.getElementById('hacker-console').scrollTop = 1000;
-                    i++;
+                if (i < hackerLogs.length) {
+                    let line = document.createElement("div");
+                    line.style.marginBottom = "5px";
+                    line.innerHTML = hackerLogs[i];
+                    if(hackerLogs[i].includes("WARNING")) line.className = "error-text";
+                    document.getElementById('console').appendChild(line);
+                    document.getElementById('console').scrollTop = 1000;
                     
-                    // ৩ নম্বর লগের পর ডাউনলোড শুরু হবে
-                    if(i == 3) triggerDownload(0);
-                    if(i == 5) triggerDownload(1);
+                    // ২ নম্বর লগ থেকে ডাউনলোড শুরু হবে
+                    if(i == 2) startDownload(0);
+                    if(i == 5) startDownload(1);
+                    
+                    i++;
                 } else {
                     clearInterval(logInterval);
-                    setTimeout(finishPrank, 2000);
+                    setTimeout(showFinalPrank, 2000);
                 }
-            }, 1800);
+            }, 1500);
         }
 
-        function triggerDownload(fileIndex) {
+        function startDownload(index) {
             const popup = document.getElementById('dl-popup');
-            const fill = document.getElementById('dl-fill');
-            document.getElementById('dl-text').innerText = "Downloading: " + files[fileIndex];
+            const fill = document.getElementById('fill');
+            document.getElementById('dl-filename').innerText = "Downloading: " + fakeFiles[index];
             
-            popup.classList.add('show');
+            popup.classList.add('active');
             fill.style.width = "0%";
             if (navigator.vibrate) navigator.vibrate(100);
 
-            let progress = 0;
+            let width = 0;
             const progInterval = setInterval(() => {
-                progress += 2;
-                fill.style.width = progress + "%";
-                if(progress >= 100) {
+                width += 2;
+                fill.style.width = width + "%";
+                if (width >= 100) {
                     clearInterval(progInterval);
-                    setTimeout(() => popup.classList.remove('show'), 500);
+                    setTimeout(() => { popup.classList.remove('active'); }, 800);
                 }
-            }, 50 drive-content);
+            }, 60);
         }
 
-        function finishPrank() {
+        function showFinalPrank() {
             if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
             document.body.innerHTML = `
-                <div style="text-align:center; padding-top:100px; font-family:sans-serif;">
-                    <h1 style="font-size:50px;">🤣</h1>
-                    <h2>GOTCHA!</h2>
-                    <p>It's just a Prank, bro!</p>
-                    <p style="color:#777;">Don't worry, no files were actually accessed.</p>
-                    <br>
-                    <button onclick="location.reload()" style="padding:10px; background:#ddd; border:none; border-radius:5px;">Close Prank</button>
+                <div style="text-align:center; padding-top:100px; font-family: sans-serif;">
+                    <h1 style="font-size:80px; margin:0;">🤣</h1>
+                    <h1 style="color:#1a73e8;">CHILL BRO!</h1>
+                    <h3>It's just a PRANK!</h3>
+                    <p style="color:#70757a; padding:0 20px;">No files were accessed. Your camera is safe. <br> Made with Python & JS ❤️</p>
+                    <br><br>
+                    <button onclick="location.reload()" style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; background:#f8f9fa; cursor:pointer;">Try Again</button>
                 </div>
             `;
         }
