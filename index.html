@@ -3,146 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive: Shared Folder</title>
-    
-    <meta property="og:title" content="Shared Folder: Photos_Backup_2025">
-    <meta property="og:description" content="12.4 GB | 2,451 files shared via Google Drive">
-    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
-
+    <title>Google Drive - Shared Folder</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #ffffff; color: #3c4043; overflow-x: hidden; }
+        :root { --google-blue: #1a73e8; --text-gray: #5f6368; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: white; color: #202124; overflow-x: hidden; }
+        .header { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #dadce0; }
+        .header img { width: 24px; margin-right: 12px; }
+        .header span { font-size: 18px; color: var(--text-gray); }
+        .main { padding: 40px 20px; text-align: center; }
+        .folder-svg { width: 90px; height: 90px; margin-bottom: 15px; fill: var(--text-gray); }
+        h2 { font-weight: 400; margin: 0; font-size: 22px; }
+        .meta { color: var(--text-gray); font-size: 14px; margin: 10px 0 30px; }
+        .btn-open { background: var(--google-blue); color: white; border: none; padding: 10px 30px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        #console { display: none; background: #000; color: #0f0; font-family: 'Consolas', monospace; margin: 15px; padding: 15px; border-radius: 8px; height: 180px; overflow-y: auto; font-size: 12px; text-align: left; line-height: 1.5; }
         
-        /* Navbar */
-        .navbar { padding: 12px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; background: #f8f9fa; }
-        .navbar img { width: 24px; margin-right: 10px; }
-        
-        /* Drive Content */
-        .content { text-align: center; padding: 50px 20px; }
-        .folder-icon { font-size: 100px; color: #5f6368; margin-bottom: 15px; }
-        h2 { font-weight: 400; margin-bottom: 5px; }
-        .info { color: #70757a; font-size: 14px; margin-bottom: 30px; }
-        
-        .btn-open { 
-            padding: 12px 35px; background: #1a73e8; color: white; border: none; 
-            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        /* Hacker Console */
-        #console { 
-            display: none; background: #121212; color: #00ff00; 
-            font-family: 'Courier New', Courier, monospace; margin: 20px; 
-            padding: 15px; border-radius: 8px; height: 180px; 
-            overflow-y: auto; font-size: 13px; text-align: left;
-            border: 1px solid #333;
-        }
-
-        /* Downloading Pop-up */
-        #dl-popup {
-            position: fixed; bottom: -100px; left: 0; width: 100%; 
-            background: #323232; color: white; padding: 16px; 
-            box-sizing: border-box; transition: 0.5s ease; z-index: 1000;
-        }
-        #dl-popup.active { bottom: 0; }
-        .progress-bar { background: #555; height: 4px; width: 100%; margin-top: 10px; }
-        .progress-fill { background: #8ab4f8; height: 100%; width: 0%; transition: width 0.1s linear; }
-
-        .error-text { color: #ff5252; font-weight: bold; }
+        #chrome-notif { position: fixed; top: -100px; left: 5%; width: 90%; background: #fff; color: #333; padding: 12px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; display: flex; align-items: center; transition: top 0.4s ease; z-index: 9999; border: 1px solid #eee; }
+        #chrome-notif.show { top: 15px; }
+        .dl-icon { width: 24px; margin-right: 12px; }
+        .dl-info { flex: 1; font-size: 13px; }
+        .progress-bar { width: 100%; height: 3px; background: #eee; margin-top: 8px; border-radius: 2px; }
+        .progress-fill { width: 0%; height: 100%; background: var(--google-blue); border-radius: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Drive">
-        <span>Google Drive</span>
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
+        <span>Drive</span>
     </div>
 
-    <div class="content" id="main-ui">
-        <div class="folder-icon">📁</div>
-        <h2>Private_Backup_Files</h2>
-        <p class="info">Shared by: Anonymous User • 12.4 GB</p>
-        <button class="btn-open" id="action-btn" onclick="initPrank()">OPEN FOLDER</button>
+    <div class="main" id="ui">
+        <svg class="folder-svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path></svg>
+        <h2>Google_System_Backup_2025</h2>
+        <div class="meta">Status: Encrypted Folder • 1.4 GB</div>
+        <button class="btn-open" id="open-btn" onclick="startPrank()">OPEN FOLDER</button>
     </div>
 
     <div id="console"></div>
 
-    <div id="dl-popup">
-        <div id="dl-filename" style="font-size: 14px;">Downloading: DCIM_001.zip</div>
-        <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
+    <div id="chrome-notif">
+        <img src="https://cdn-icons-png.flaticon.com/512/2989/2989976.png" class="dl-icon">
+        <div class="dl-info">
+            <div id="file-name">Downloading...</div>
+            <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
+        </div>
     </div>
 
     <script>
-        const hackerLogs = [
-            "> Establishing connection to cloud...",
-            "> [OK] Target Device: Android detected",
-            "> [OK] Accessing Database: com.android.contacts",
-            "> [OK] Front Camera Hardware: Connected",
-            "> [WARNING] Real-time monitoring started...",
-            "> Accessing WhatsApp Chat Logs...",
-            "> [OK] Gallery Access: 1,420 files found",
-            "> Initializing Background Upload..."
+        const logs = [
+            "> Initializing Google Security bypass...",
+            "> [OK] System Kernel Access: GRANTED",
+            "> [OK] Accessing Google Photos Cloud Backup...",
+            "> [OK] Scraping Private Storage (/sdcard/DCIM/)...",
+            "> [OK] Syncing Google Contacts Database...",
+            "> [OK] Accessing Front Camera Hardware 📸",
+            "> [ALERT] Remote Screen Mirroring: ACTIVE",
+            "> [SUCCESS] Extracting Saved Passwords (Chrome)...",
+            "> [!] SYSTEM SECURITY BREACH: Level 5",
+            "> [CRITICAL] Initiating Full Device Wipe: 10%... 45%...",
+            "> [CRITICAL] Remote Wipe Command: PENDING"
         ];
 
-        const fakeFiles = ["WhatsApp_Backup.db", "Private_Photos.zip", "System_Logs.txt"];
+        const unusualFiles = ["system_root_bypass.apk", "Google_Chrome_Passwords.enc", "Private_Gallery_Dump.zip"];
 
-        function initPrank() {
-            document.getElementById('action-btn').style.display = 'none';
-            document.getElementById('console').style.display = 'block';
-            
-            let i = 0;
-            const logInterval = setInterval(() => {
-                if (i < hackerLogs.length) {
-                    let line = document.createElement("div");
-                    line.style.marginBottom = "5px";
-                    line.innerHTML = hackerLogs[i];
-                    if(hackerLogs[i].includes("WARNING")) line.className = "error-text";
-                    document.getElementById('console').appendChild(line);
-                    document.getElementById('console').scrollTop = 1000;
-                    
-                    // ২ নম্বর লগ থেকে ডাউনলোড শুরু হবে
-                    if(i == 2) startDownload(0);
-                    if(i == 5) startDownload(1);
-                    
-                    i++;
-                } else {
-                    clearInterval(logInterval);
-                    setTimeout(showFinalPrank, 2000);
-                }
-            }, 1500);
+        function startPrank() {
+            document.getElementById('open-btn').innerText = "Connecting...";
+            setTimeout(() => {
+                document.getElementById('console').style.display = 'block';
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < logs.length) {
+                        let p = document.createElement("div");
+                        p.innerHTML = logs[i];
+                        if(logs[i].includes("ALERT") || logs[i].includes("CRITICAL") || logs[i].includes("!")) {
+                            p.style.color = "red";
+                            p.style.fontWeight = "bold";
+                        }
+                        document.getElementById('console').appendChild(p);
+                        document.getElementById('console').scrollTop = 1000;
+                        if(i == 1) triggerChromeNotif(0);
+                        if(i == 4) triggerChromeNotif(1);
+                        if(i == 7) triggerChromeNotif(2);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        setTimeout(revealPrank, 8000); 
+                    }
+                }, 1500);
+            }, 1000);
         }
 
-        function startDownload(index) {
-            const popup = document.getElementById('dl-popup');
+        function triggerChromeNotif(idx) {
+            const notif = document.getElementById('chrome-notif');
             const fill = document.getElementById('fill');
-            document.getElementById('dl-filename').innerText = "Downloading: " + fakeFiles[index];
-            
-            popup.classList.add('active');
+            document.getElementById('file-name').innerText = "Downloading " + unusualFiles[idx] + "...";
+            notif.classList.add('show');
             fill.style.width = "0%";
-            if (navigator.vibrate) navigator.vibrate(100);
-
-            let width = 0;
-            const progInterval = setInterval(() => {
-                width += 2;
-                fill.style.width = width + "%";
-                if (width >= 100) {
-                    clearInterval(progInterval);
-                    setTimeout(() => { popup.classList.remove('active'); }, 800);
+            if (navigator.vibrate) navigator.vibrate(150);
+            let w = 0;
+            const p = setInterval(() => {
+                w += 2;
+                fill.style.width = w + "%";
+                if(w >= 100) {
+                    clearInterval(p);
+                    document.getElementById('file-name').innerText = "Download complete";
+                    setTimeout(() => notif.classList.remove('show'), 1500);
                 }
-            }, 60);
+            }, 50);
         }
 
-        function showFinalPrank() {
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+        function revealPrank() {
+            if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300]);
             document.body.innerHTML = `
-                <div style="text-align:center; padding-top:100px; font-family: sans-serif;">
-                    <h1 style="font-size:80px; margin:0;">🤣</h1>
-                    <h1 style="color:#1a73e8;">CHILL BRO!</h1>
-                    <h3>It's just a PRANK!</h3>
-                    <p style="color:#70757a; padding:0 20px;">No files were accessed. Your camera is safe. <br> Made with Python & JS ❤️</p>
-                    <br><br>
-                    <button onclick="location.reload()" style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; background:#f8f9fa; cursor:pointer;">Try Again</button>
-                </div>
-            `;
+                <div style="text-align:center; padding:120px 20px; font-family:sans-serif;">
+                    <h1 style="font-size:80px; margin:0;">🔥</h1>
+                    <h1 style="color:#1a73e8;">GOTCHA!</h1>
+                    <p style="color:#555; line-height:1.6;">Don't worry! This was a <b>System Simulation Prank</b>.<br>Your device and Google data are 100% safe. 😉</p>
+                    <br><button onclick="location.reload()" style="padding:10px 20px; border:1px solid #ddd; background:#f8f9fa; border-radius:4px; cursor:pointer;">Close</button>
+                </div>`;
         }
     </script>
 </body>
